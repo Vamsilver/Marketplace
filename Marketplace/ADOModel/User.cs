@@ -7,39 +7,39 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
+        public User()
         {
-            this.BasketProduct = new HashSet<BasketProduct>();
+            this.Basket = new HashSet<Basket>();
             this.Like = new HashSet<Like>();
+            this.Product = new HashSet<Product>();
             this.ProductAddRequest = new HashSet<ProductAddRequest>();
         }
     
-        public int idProduct { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
         public int idUser { get; set; }
-        public int idProductCategory { get; set; }
-        public int idProductBirthRate { get; set; }
-        public bool onSell { get; set; }
-        public decimal Cost { get; set; }
-        public Nullable<bool> isApproved { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int idAuthorization { get; set; }
+        public int idRole { get; set; }
+        public System.DateTime BirthDate { get; set; }
+        public decimal Balance { get; set; }
     
+        public virtual Authorization Authorization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BasketProduct> BasketProduct { get; set; }
+        public virtual ICollection<Basket> Basket { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Like> Like { get; set; }
-        public virtual ProductBirthRate ProductBirthRate { get; set; }
-        public virtual ProductCategory ProductCategory { get; set; }
-        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductAddRequest> ProductAddRequest { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

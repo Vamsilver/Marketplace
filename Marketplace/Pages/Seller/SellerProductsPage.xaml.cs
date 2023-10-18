@@ -16,19 +16,23 @@ using System.Windows.Shapes;
 namespace Marketplace.Pages.Seller
 {
     /// <summary>
-    /// Interaction logic for SellerHomePage.xaml
+    /// Interaction logic for SellerProductsPage.xaml
     /// </summary>
-    public partial class SellerHomePage : Page
+    public partial class SellerProductsPage : Page
     {
-        public SellerHomePage()
+        public SellerProductsPage()
         {
             InitializeComponent();
-            UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
         }
 
-        private void NameHyperlinkClick(object sender, RoutedEventArgs e)
+        private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SellerProductsPage());
+            
+        }
+
+        private void AddNewProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AddNewProductPage());
         }
     }
 }

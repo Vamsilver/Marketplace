@@ -7,17 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class ProductAddRequest
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int idProductAddRequest { get; set; }
+        public int idProduct { get; set; }
+        public int idUser { get; set; }
+    
+        public virtual Product Product { get; set; }
+        public virtual User User { get; set; }
     }
 }

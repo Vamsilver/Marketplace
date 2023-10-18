@@ -7,24 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Authorization
+    public partial class ProductBirthRate
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Authorization()
+        public ProductBirthRate()
         {
-            this.User = new HashSet<User>();
+            this.Product = new HashSet<Product>();
         }
     
-        public int idAuthorization { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
+        public int idProductBirthRate { get; set; }
+        public int BirthRate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<Product> Product { get; set; }
+
+        public override string ToString()
+        {
+            return BirthRate.ToString() + "+";
+        }
     }
 }

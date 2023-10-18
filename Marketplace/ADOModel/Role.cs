@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
@@ -25,5 +25,10 @@ namespace Marketplace
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> User { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

@@ -33,10 +33,10 @@
         </Grid.ColumnDefinitions>
         <Image Source="/Images/logo.jpg" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="30">Логин</TextBlock>
-        <TextBox x:Name="LoginTextBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Width="500"></TextBox>
+        <TextBox x:Name="LoginTextBox" Grid.Row="4" FontSize="30" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Width="500"></TextBox>
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="30">Пароль</TextBlock>
-        <TextBox x:Name="PasswordTextBox" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Width="500"></TextBox>
-        <TextBlock Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"><Hyperlink>Зарегистрироваться</Hyperlink></TextBlock>
+        <PasswordBox x:Name="PasswordTextBox" Grid.Row="8" FontSize="30" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Width="500"></PasswordBox>
+        <TextBlock Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"><Hyperlink Click="RegistrationHyperlinkClick">Зарегистрироваться</Hyperlink></TextBlock>
         <Button Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="4" HorizontalAlignment="Center" Width="200" FontSize="36" Click="AuthorizationButtonClick">Войти</Button>
     </Grid>
 </Page>

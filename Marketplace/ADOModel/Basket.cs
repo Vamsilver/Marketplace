@@ -7,23 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductBirthRate
+    public partial class Basket
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProductBirthRate()
+        public Basket()
         {
-            this.Product = new HashSet<Product>();
+            this.BasketProduct = new HashSet<BasketProduct>();
         }
     
-        public int idProductBirthRate { get; set; }
-        public int BirthRate { get; set; }
+        public int idBasket { get; set; }
+        public int idUser { get; set; }
     
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Product { get; set; }
+        public virtual ICollection<BasketProduct> BasketProduct { get; set; }
     }
 }

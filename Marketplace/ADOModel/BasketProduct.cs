@@ -7,18 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marketplace
+namespace Marketplace.ADOModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductAddRequest
+    public partial class BasketProduct
     {
-        public int idProductAddRequest { get; set; }
+        public int idBasketProduct { get; set; }
+        public int idBasket { get; set; }
         public int idProduct { get; set; }
-        public int idUser { get; set; }
+        public int Count { get; set; }
     
+        public virtual Basket Basket { get; set; }
         public virtual Product Product { get; set; }
-        public virtual User User { get; set; }
     }
 }

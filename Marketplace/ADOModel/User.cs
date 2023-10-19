@@ -19,8 +19,8 @@ namespace Marketplace.ADOModel
         {
             this.Basket = new HashSet<Basket>();
             this.Like = new HashSet<Like>();
-            this.Product = new HashSet<Product>();
             this.ProductAddRequest = new HashSet<ProductAddRequest>();
+            this.Product = new HashSet<Product>();
         }
     
         public int idUser { get; set; }
@@ -37,9 +37,9 @@ namespace Marketplace.ADOModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Like> Like { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Product { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductAddRequest> ProductAddRequest { get; set; }
         public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Product { get; set; }
     }
 }

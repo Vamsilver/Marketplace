@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marketplace.ADOModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace Marketplace.Pages.Seller
         public SellerProductsPage()
         {
             InitializeComponent();
+
+            ProductList.ItemsSource = App.Connection.Product.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
         }
 
         private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
@@ -33,6 +36,32 @@ namespace Marketplace.Pages.Seller
         private void AddNewProductButtonClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new AddNewProductPage());
+        }
+
+        private void LikeButtonClick(object sender, RoutedEventArgs e)
+        {
+            var newLike = new Like();
+
+            var currentProduct = ProductList.SelectedItem as Product;
+
+            if (currentProduct == null)
+                return;
+
+            newLike.Product = currentProduct;
+            newLike.User = App.CurrentUser;
+
+            var oldLike = App.Connection.Like.
+                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
+                           z.idUser.Equals(App.CurrentUser.idUser)).
+                FirstOrDefault();
+
+            if (oldLike != null)
+                return;
+            else
+            {
+                App.Connection.Like.Add(newLike);
+                App.Connection.SaveChanges();
+            }
         }
     }
 }

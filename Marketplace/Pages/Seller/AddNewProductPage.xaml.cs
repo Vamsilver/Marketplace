@@ -69,6 +69,7 @@ namespace Marketplace.Pages.Seller
                 newProduct.Cost = Decimal.Parse(CostTextBox.Text.Replace('.', ','));
                 newProduct.isApproved = false;
                 newProduct.image = imageBytes;
+                newProduct.AmountOfSales = 0;
             }
             catch (Exception)
             {

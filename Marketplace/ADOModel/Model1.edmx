@@ -51,6 +51,7 @@
           <Property Name="Cost" Type="decimal" Precision="8" Scale="2" Nullable="false" />
           <Property Name="isApproved" Type="bit" Nullable="false" />
           <Property Name="image" Type="varbinary(max)" Nullable="false" />
+          <Property Name="AmountOfSales" Type="int" />
         </EntityType>
         <EntityType Name="ProductAddRequest">
           <Key>
@@ -317,7 +318,6 @@
           <EntitySet Name="Basket" EntityType="MarketplaceModel.Basket" />
           <EntitySet Name="BasketProduct" EntityType="MarketplaceModel.BasketProduct" />
           <EntitySet Name="Like" EntityType="MarketplaceModel.Like" />
-          <EntitySet Name="Product" EntityType="MarketplaceModel.Product" />
           <EntitySet Name="ProductAddRequest" EntityType="MarketplaceModel.ProductAddRequest" />
           <EntitySet Name="ProductBirthRate" EntityType="MarketplaceModel.ProductBirthRate" />
           <EntitySet Name="ProductCategory" EntityType="MarketplaceModel.ProductCategory" />
@@ -336,16 +336,25 @@
             <End Role="Basket" EntitySet="Basket" />
             <End Role="BasketProduct" EntitySet="BasketProduct" />
           </AssociationSet>
+          <AssociationSet Name="FK_Like_User" Association="MarketplaceModel.FK_Like_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Like" EntitySet="Like" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAddRequest_User" Association="MarketplaceModel.FK_ProductAddRequest_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ProductAddRequest" EntitySet="ProductAddRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="MarketplaceModel.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <EntitySet Name="Product" EntityType="MarketplaceModel.Product" />
           <AssociationSet Name="FK_BasketProduct_Product" Association="MarketplaceModel.FK_BasketProduct_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="BasketProduct" EntitySet="BasketProduct" />
           </AssociationSet>
           <AssociationSet Name="FK_Like_Product" Association="MarketplaceModel.FK_Like_Product">
             <End Role="Product" EntitySet="Product" />
-            <End Role="Like" EntitySet="Like" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Like_User" Association="MarketplaceModel.FK_Like_User">
-            <End Role="User" EntitySet="User" />
             <End Role="Like" EntitySet="Like" />
           </AssociationSet>
           <AssociationSet Name="FK_Product_ProductBirthRate" Association="MarketplaceModel.FK_Product_ProductBirthRate">
@@ -363,14 +372,6 @@
           <AssociationSet Name="FK_ProductAddRequest_Product" Association="MarketplaceModel.FK_ProductAddRequest_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="ProductAddRequest" EntitySet="ProductAddRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductAddRequest_User" Association="MarketplaceModel.FK_ProductAddRequest_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="ProductAddRequest" EntitySet="ProductAddRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Role" Association="MarketplaceModel.FK_User_Role">
-            <End Role="Role" EntitySet="Role" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Authorization">
@@ -409,29 +410,8 @@
           <Property Name="idLike" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idUser" Type="Int32" Nullable="false" />
           <Property Name="idProduct" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_Like_Product" FromRole="Like" ToRole="Product" />
           <NavigationProperty Name="User" Relationship="MarketplaceModel.FK_Like_User" FromRole="Like" ToRole="User" />
-        </EntityType>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="idProduct" />
-          </Key>
-          <Property Name="idProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="idUser" Type="Int32" Nullable="false" />
-          <Property Name="idProductCategory" Type="Int32" Nullable="false" />
-          <Property Name="idProductBirthRate" Type="Int32" Nullable="false" />
-          <Property Name="onSell" Type="Boolean" Nullable="false" />
-          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
-          <Property Name="isApproved" Type="Boolean" Nullable="false" />
-          <Property Name="image" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="BasketProduct" Relationship="MarketplaceModel.FK_BasketProduct_Product" FromRole="Product" ToRole="BasketProduct" />
-          <NavigationProperty Name="Like" Relationship="MarketplaceModel.FK_Like_Product" FromRole="Product" ToRole="Like" />
-          <NavigationProperty Name="ProductBirthRate" Relationship="MarketplaceModel.FK_Product_ProductBirthRate" FromRole="Product" ToRole="ProductBirthRate" />
-          <NavigationProperty Name="ProductCategory" Relationship="MarketplaceModel.FK_Product_ProductCategory" FromRole="Product" ToRole="ProductCategory" />
-          <NavigationProperty Name="User" Relationship="MarketplaceModel.FK_Product_User" FromRole="Product" ToRole="User" />
-          <NavigationProperty Name="ProductAddRequest" Relationship="MarketplaceModel.FK_ProductAddRequest_Product" FromRole="Product" ToRole="ProductAddRequest" />
+          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_Like_Product" FromRole="Like" ToRole="Product" />
         </EntityType>
         <EntityType Name="ProductAddRequest">
           <Key>
@@ -440,8 +420,8 @@
           <Property Name="idProductAddRequest" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idProduct" Type="Int32" Nullable="false" />
           <Property Name="idUser" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_ProductAddRequest_Product" FromRole="ProductAddRequest" ToRole="Product" />
           <NavigationProperty Name="User" Relationship="MarketplaceModel.FK_ProductAddRequest_User" FromRole="ProductAddRequest" ToRole="User" />
+          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_ProductAddRequest_Product" FromRole="ProductAddRequest" ToRole="Product" />
         </EntityType>
         <EntityType Name="ProductBirthRate">
           <Key>
@@ -491,9 +471,9 @@
           <NavigationProperty Name="Authorization" Relationship="MarketplaceModel.FK_User_Authorization" FromRole="User" ToRole="Authorization" />
           <NavigationProperty Name="Basket" Relationship="MarketplaceModel.FK_Basket_User" FromRole="User" ToRole="Basket" />
           <NavigationProperty Name="Like" Relationship="MarketplaceModel.FK_Like_User" FromRole="User" ToRole="Like" />
-          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_Product_User" FromRole="User" ToRole="Product" />
           <NavigationProperty Name="ProductAddRequest" Relationship="MarketplaceModel.FK_ProductAddRequest_User" FromRole="User" ToRole="ProductAddRequest" />
           <NavigationProperty Name="Role" Relationship="MarketplaceModel.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Product" Relationship="MarketplaceModel.FK_Product_User" FromRole="User" ToRole="Product" />
         </EntityType>
         <Association Name="FK_User_Authorization">
           <End Type="MarketplaceModel.Authorization" Role="Authorization" Multiplicity="1" />
@@ -531,6 +511,64 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Like_User">
+          <End Type="MarketplaceModel.User" Role="User" Multiplicity="1" />
+          <End Type="MarketplaceModel.Like" Role="Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAddRequest_User">
+          <End Type="MarketplaceModel.User" Role="User" Multiplicity="1" />
+          <End Type="MarketplaceModel.ProductAddRequest" Role="ProductAddRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="ProductAddRequest">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Type="MarketplaceModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="MarketplaceModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="idRole" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="idRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="idUser" Type="Int32" Nullable="false" />
+          <Property Name="idProductCategory" Type="Int32" Nullable="false" />
+          <Property Name="idProductBirthRate" Type="Int32" Nullable="false" />
+          <Property Name="onSell" Type="Boolean" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="isApproved" Type="Boolean" Nullable="false" />
+          <Property Name="image" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="AmountOfSales" Type="Int32" />
+          <NavigationProperty Name="BasketProduct" Relationship="MarketplaceModel.FK_BasketProduct_Product" FromRole="Product" ToRole="BasketProduct" />
+          <NavigationProperty Name="Like" Relationship="MarketplaceModel.FK_Like_Product" FromRole="Product" ToRole="Like" />
+          <NavigationProperty Name="ProductBirthRate" Relationship="MarketplaceModel.FK_Product_ProductBirthRate" FromRole="Product" ToRole="ProductBirthRate" />
+          <NavigationProperty Name="ProductCategory" Relationship="MarketplaceModel.FK_Product_ProductCategory" FromRole="Product" ToRole="ProductCategory" />
+          <NavigationProperty Name="User" Relationship="MarketplaceModel.FK_Product_User" FromRole="Product" ToRole="User" />
+          <NavigationProperty Name="ProductAddRequest" Relationship="MarketplaceModel.FK_ProductAddRequest_Product" FromRole="Product" ToRole="ProductAddRequest" />
+        </EntityType>
         <Association Name="FK_BasketProduct_Product">
           <End Type="MarketplaceModel.Product" Role="Product" Multiplicity="1" />
           <End Type="MarketplaceModel.BasketProduct" Role="BasketProduct" Multiplicity="*" />
@@ -552,18 +590,6 @@
             </Principal>
             <Dependent Role="Like">
               <PropertyRef Name="idProduct" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Like_User">
-          <End Type="MarketplaceModel.User" Role="User" Multiplicity="1" />
-          <End Type="MarketplaceModel.Like" Role="Like" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="idUser" />
-            </Principal>
-            <Dependent Role="Like">
-              <PropertyRef Name="idUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -615,30 +641,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductAddRequest_User">
-          <End Type="MarketplaceModel.User" Role="User" Multiplicity="1" />
-          <End Type="MarketplaceModel.ProductAddRequest" Role="ProductAddRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="idUser" />
-            </Principal>
-            <Dependent Role="ProductAddRequest">
-              <PropertyRef Name="idUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Role">
-          <End Type="MarketplaceModel.Role" Role="Role" Multiplicity="1" />
-          <End Type="MarketplaceModel.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="idRole" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="idRole" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -678,22 +680,6 @@
                 <ScalarProperty Name="idProduct" ColumnName="idProduct" />
                 <ScalarProperty Name="idUser" ColumnName="idUser" />
                 <ScalarProperty Name="idLike" ColumnName="idLike" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Product">
-            <EntityTypeMapping TypeName="MarketplaceModel.Product">
-              <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="image" ColumnName="image" />
-                <ScalarProperty Name="isApproved" ColumnName="isApproved" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="onSell" ColumnName="onSell" />
-                <ScalarProperty Name="idProductBirthRate" ColumnName="idProductBirthRate" />
-                <ScalarProperty Name="idProductCategory" ColumnName="idProductCategory" />
-                <ScalarProperty Name="idUser" ColumnName="idUser" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -751,6 +737,23 @@
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="idUser" ColumnName="idUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="MarketplaceModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="AmountOfSales" ColumnName="AmountOfSales" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="isApproved" ColumnName="isApproved" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="onSell" ColumnName="onSell" />
+                <ScalarProperty Name="idProductBirthRate" ColumnName="idProductBirthRate" />
+                <ScalarProperty Name="idProductCategory" ColumnName="idProductCategory" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

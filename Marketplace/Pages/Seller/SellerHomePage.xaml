@@ -28,27 +28,28 @@
         <TextBlock Grid.Column="1" Grid.ColumnSpan="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="42">MARKETPLACE</TextBlock>
         <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.ColumnSpan="2"><Hyperlink Click="NameHyperlinkClick"><TextBlock x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
         <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб." Height="38" Width="158"/>
+       
         <ListView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="5"></UniformGrid>
+                    <UniformGrid Columns="4"></UniformGrid>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Width="180" Height="350" Margin="30 0 30 30" Background="#353831">
-                        <StackPanel.Effect>
-                            <DropShadowEffect Opacity="10" RenderingBias="Performance" Direction="130" ShadowDepth="3" BlurRadius="30" />
-                        </StackPanel.Effect>
-                        <StackPanel Orientation="Vertical" Margin="10" Width="160">
-                            <Image Source="{Binding Image}" Height="160" Width="160"/>
-                            <Label Foreground="#FEF9EF" FontSize="28" Content="{Binding Title}" HorizontalAlignment="Center"/>
-                            <Label Foreground="#FEF9EF" FontSize="24" Content="{Binding Cost}" HorizontalAlignment="Center"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="♥" x:Name="LikeBtn" VerticalAlignment="Center" FontSize="60" HorizontalAlignment="Left"></Button>
-                                <Button Content="🛒" x:Name="BuyBtn" VerticalAlignment="Center" FontSize="40" HorizontalAlignment="Right" Margin="60,0,0,0"></Button>
-                            </StackPanel>
-                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Width="260" Height="370" Margin="20 0 20 20">
+
+                        <Image Source="{Binding image}" Width="240" Height="200" Margin="0,10,0,0"></Image>
+
+                        <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" TextWrapping="Wrap" FontSize="22" Margin="10,0,10,0" Height="60" >ПРОПРОПРОПРОПРОПРОПРОПРОПРОПРОП...</TextBlock>
+                        <TextBlock x:Name="CostTextBlock" Text="{Binding Cost}" FontSize="36">396 Р.</TextBlock>
+
+                        <DockPanel Margin="0,12,0,0" LastChildFill="True" HorizontalAlignment="Center">
+                            <Button Click="LikeButtonClick" DockPanel.Dock="Left" Padding="5,-10,5,0" Background="White" Foreground="Red" FontSize="40" Height="40" Content="♥"></Button>
+                            <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=AmountOfSales, StringFormat=' {0} купили'}"></TextBlock>
+                            <Button Padding="5,-5,5,0" DockPanel.Dock="Right" Background="White" Foreground="Red" FontSize="24" Height="40" Width="45" Content="🛒"></Button>
+                        </DockPanel>
+                        
                         <Separator Height="5" Opacity="0"/>
                     </StackPanel>
                 </DataTemplate>

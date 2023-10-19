@@ -29,12 +29,12 @@ namespace Marketplace.ADOModel
         public virtual DbSet<Basket> Basket { get; set; }
         public virtual DbSet<BasketProduct> BasketProduct { get; set; }
         public virtual DbSet<Like> Like { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductAddRequest> ProductAddRequest { get; set; }
         public virtual DbSet<ProductBirthRate> ProductBirthRate { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
     }
 }

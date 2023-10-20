@@ -25,7 +25,14 @@ namespace Marketplace.Pages.Seller
         {
             InitializeComponent();
 
-            ProductList.ItemsSource = App.Connection.Product.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+            List<ViewProduct> viewProductList = new List<ViewProduct>();
+
+            var productList = App.Connection.Product.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+
+            foreach (Product product in productList)
+                viewProductList.Add(new ViewProduct(product));
+
+            ProductList.ItemsSource = viewProductList;
         }
 
         private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
@@ -62,6 +69,45 @@ namespace Marketplace.Pages.Seller
                 App.Connection.Like.Add(newLike);
                 App.Connection.SaveChanges();
             }
+        }
+
+        private void LikedProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            var newLike = new Like();
+
+            var currentProduct = ProductList.SelectedItem as Product;
+
+            if (currentProduct == null)
+                return;
+
+            newLike.Product = currentProduct;
+            newLike.User = App.CurrentUser;
+
+            var oldLike = App.Connection.Like.
+                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
+                           z.idUser.Equals(App.CurrentUser.idUser)).
+                FirstOrDefault();
+
+            if (oldLike != null)
+                return;
+            else
+            {
+                App.Connection.Like.Add(newLike);
+                App.Connection.SaveChanges();
+            }
+        }
+
+        private void ProductListMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(ProductList.SelectedItem != null)
+            {
+                NavigationService.Navigate(new EditSellerProductPage(((Product)ProductList.SelectedItem).idProduct));
+            }
+        }
+
+        private void LogoButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new SellerHomePage());
         }
     }
 }

@@ -21,14 +21,14 @@
         <AssociationConnector Association="MarketplaceModel.FK_Like_User" />
         <AssociationConnector Association="MarketplaceModel.FK_ProductAddRequest_User" />
         <AssociationConnector Association="MarketplaceModel.FK_User_Role" />
-        <EntityTypeShape EntityType="MarketplaceModel.Product" Width="1.5" PointX="5.25" PointY="4" />
+        <EntityTypeShape EntityType="MarketplaceModel.Product" Width="1.5" PointX="5.25" PointY="3.875" />
         <AssociationConnector Association="MarketplaceModel.FK_BasketProduct_Product" />
         <AssociationConnector Association="MarketplaceModel.FK_Like_Product" />
         <AssociationConnector Association="MarketplaceModel.FK_Product_ProductBirthRate" />
         <AssociationConnector Association="MarketplaceModel.FK_Product_ProductCategory" />
         <AssociationConnector Association="MarketplaceModel.FK_Product_User" />
         <AssociationConnector Association="MarketplaceModel.FK_ProductAddRequest_Product" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

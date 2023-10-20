@@ -27,7 +27,14 @@ namespace Marketplace.Pages.Seller
             InitializeComponent();
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
 
-            ProductList.ItemsSource = App.Connection.Product.ToList();
+            List<ViewProduct> viewProductList = new List<ViewProduct>();
+
+            var productList = App.Connection.Product.ToList();
+
+            foreach (Product product in productList)
+                viewProductList.Add(new ViewProduct(product));
+
+            ProductList.ItemsSource = viewProductList;
         }
 
         private void NameHyperlinkClick(object sender, RoutedEventArgs e)
@@ -59,6 +66,11 @@ namespace Marketplace.Pages.Seller
                 App.Connection.Like.Add(newLike);
                 App.Connection.SaveChanges();
             }
+        }
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

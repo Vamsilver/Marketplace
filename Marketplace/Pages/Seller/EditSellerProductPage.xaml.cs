@@ -19,20 +19,30 @@ using System.Windows.Shapes;
 namespace Marketplace.Pages.Seller
 {
     /// <summary>
-    /// Interaction logic for AddNewProductPage.xaml
+    /// Interaction logic for EditSellerProductPage.xaml
     /// </summary>
-    public partial class AddNewProductPage : Page
+    public partial class EditSellerProductPage : Page
     {
         Product product = new Product();
         byte[] imageBytes;
 
-        public AddNewProductPage()
+        public EditSellerProductPage(int productId)
         {
             InitializeComponent();
+
+            product = App.Connection.Product.Where(z => z.idProduct.Equals(productId)).FirstOrDefault();
+
             DataContext = product;
             BirthRateComboBox.ItemsSource = App.Connection.ProductBirthRate.ToList();
             CategoryComboBox.ItemsSource = App.Connection.ProductCategory.ToList();
+            TitleTextBox.Text = product.Title;
+            CostTextBox.Text = product.Cost.ToString();
+            CategoryComboBox.SelectedItem = product.ProductCategory;
+            BirthRateComboBox.SelectedItem = product.ProductBirthRate;
+            DesriptionTextBox.Text = product.Description;
+            imageBytes = product.image;
         }
+
         private void SelectImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -40,22 +50,26 @@ namespace Marketplace.Pages.Seller
             openFileDialog.Title = "Выберите изображение для товара.";
             openFileDialog.ShowDialog();
             imageBytes = File.ReadAllBytes(openFileDialog.FileName);
-            if(String.IsNullOrEmpty(openFileDialog.FileName))
+            if (String.IsNullOrEmpty(openFileDialog.FileName))
             {
                 MessageBox.Show("Пустое изображение");
                 return;
             }
+
             product.image = imageBytes;
+
+            DataContext = product;
             BindingOperations.GetBindingExpressionBase(ProductImage, Image.SourceProperty).UpdateTarget();
+            DataContext = product;
         }
 
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
             SelectImage();
-           
+
         }
 
-        private void AddnewProductButtonClick(object sender, RoutedEventArgs e)
+        private void EditProductButtonClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -65,7 +79,12 @@ namespace Marketplace.Pages.Seller
                 product.ProductCategory = (ProductCategory)CategoryComboBox.SelectedItem;
                 product.ProductBirthRate = (ProductBirthRate)BirthRateComboBox.SelectedItem;
                 product.onSell = false;
-                product.Cost = Decimal.Parse(CostTextBox.Text.Replace('.', ','));
+
+                var newCost = Decimal.Parse(CostTextBox.Text.Replace('.', ','));
+
+                if (product.Cost != newCost)
+                    product.OldCost = product.Cost;
+                product.Cost = newCost;
                 product.isApproved = false;
                 product.image = imageBytes;
                 product.AmountOfSales = 0;
@@ -76,12 +95,15 @@ namespace Marketplace.Pages.Seller
                 return;
             }
 
-            App.Connection.Product.Add(product);
             App.Connection.SaveChanges();
 
-            MessageBox.Show("Успешное добавление товара!");
-            NavigationService.GoBack();
+            MessageBox.Show("Успешное изменение товара товара!");
+            NavigationService.Navigate(new SellerProductsPage());
+        }
+
+        private void LogoButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new SellerHomePage());
         }
     }
-
 }

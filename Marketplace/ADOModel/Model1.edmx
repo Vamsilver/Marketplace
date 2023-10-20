@@ -52,6 +52,7 @@
           <Property Name="isApproved" Type="bit" Nullable="false" />
           <Property Name="image" Type="varbinary(max)" Nullable="false" />
           <Property Name="AmountOfSales" Type="int" />
+          <Property Name="OldCost" Type="decimal" Precision="8" Scale="2" />
         </EntityType>
         <EntityType Name="ProductAddRequest">
           <Key>
@@ -373,7 +374,7 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="ProductAddRequest" EntitySet="ProductAddRequest" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="Authorization">
           <Key>
             <PropertyRef Name="idAuthorization" />
@@ -562,6 +563,7 @@
           <Property Name="isApproved" Type="Boolean" Nullable="false" />
           <Property Name="image" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <Property Name="AmountOfSales" Type="Int32" />
+          <Property Name="OldCost" Type="Decimal" Precision="8" Scale="2" />
           <NavigationProperty Name="BasketProduct" Relationship="MarketplaceModel.FK_BasketProduct_Product" FromRole="Product" ToRole="BasketProduct" />
           <NavigationProperty Name="Like" Relationship="MarketplaceModel.FK_Like_Product" FromRole="Product" ToRole="Like" />
           <NavigationProperty Name="ProductBirthRate" Relationship="MarketplaceModel.FK_Product_ProductBirthRate" FromRole="Product" ToRole="ProductBirthRate" />
@@ -641,7 +643,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -743,6 +745,7 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="MarketplaceModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="OldCost" ColumnName="OldCost" />
                 <ScalarProperty Name="AmountOfSales" ColumnName="AmountOfSales" />
                 <ScalarProperty Name="image" ColumnName="image" />
                 <ScalarProperty Name="isApproved" ColumnName="isApproved" />

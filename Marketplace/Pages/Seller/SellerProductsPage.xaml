@@ -26,14 +26,24 @@
             <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Rectangle Fill="#e66001" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7"></Rectangle>
-        <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="42">MARKETPLACE</TextBlock>
+        <Button Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="LogoButtonClick" BorderThickness="0" Background="#e66001">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  FontSize="42">MARKETPLACE</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <TextBlock Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"><Hyperlink Click="LoginHyperlinkClick"><TextBlock Foreground="Gray" x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
         <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб."/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
             <Button FontSize="24" Width="300" Click="AddNewProductButtonClick">Добавить новый товар</Button>
         </StackPanel>
 
-        <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
+        <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontSize="32">Ваши товары</TextBlock>
+
+        <Button Click="LikedProductButtonClick" Grid.Column="4" FontSize="24" Grid.Row="2">Любимые товары</Button>
+
+        <ListView Grid.Row="3" MouseDoubleClick="ProductListMouseDoubleClick" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="4"></UniformGrid>
@@ -41,17 +51,34 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical" Width="260" Height="370" Margin="20 0 20 20">
+                    <StackPanel Orientation="Vertical" Width="260" Height="400" Margin="20 0 20 20">
 
                         <Image Source="{Binding image}" Width="240" Height="200" Margin="0,10,0,0"></Image>
 
-                        <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" TextWrapping="Wrap" FontSize="22" Margin="10,0,10,0" Height="60" >ПРОПРОПРОПРОПРОПРОПРОПРОПРОПРОП...</TextBlock>
-                        <TextBlock x:Name="CostTextBlock" Text="{Binding Cost}" FontSize="36">396 Р.</TextBlock>
+                        <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" TextWrapping="Wrap" FontSize="22" Margin="10,0,10,0" Height="60" ></TextBlock>
+                        <TextBlock x:Name="CostTextBlock" Text="{Binding Cost}" FontSize="36" FontWeight="Bold"></TextBlock>
+                        <TextBlock x:Name="OldCostTextBlock" Text="{Binding OldCost}" FontSize="24" Foreground="Gray" Style="{StaticResource Strikethrough}"></TextBlock>
 
-                        <DockPanel Margin="0,12,0,0" LastChildFill="True" HorizontalAlignment="Center">
-                            <Button Click="LikeButtonClick" DockPanel.Dock="Left" Padding="5,-10,5,0" Background="White" Foreground="Red" FontSize="40" Height="40" Content="♥"></Button>
-                            <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=AmountOfSales, StringFormat=' {0} купили'}"></TextBlock>
-                            <Button Padding="5,-5,5,0" DockPanel.Dock="Right" Background="White" Foreground="Red" FontSize="24" Height="40" Width="45" Content="🛒"></Button>
+
+                        <DockPanel Margin="0,12,0,0" LastChildFill="True" HorizontalAlignment="Center" Width="260">
+                            <Button Click="LikeButtonClick" DockPanel.Dock="Left" BorderThickness="0" Width="45" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <TextBlock>❤</TextBlock>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <StackPanel>
+                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=AmountOfSales, StringFormat=' {0} купили' }"></TextBlock>
+                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=GetAmountOfLikes, StringFormat=' {0} лайкнули' }"></TextBlock>
+                            </StackPanel>
+                            <Button Padding="5,-5,5,0" DockPanel.Dock="Right" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40" Width="45">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <TextBlock>🛒</TextBlock>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </DockPanel>
 
                         <Separator Height="5" Opacity="0"/>
@@ -59,6 +86,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
     </Grid>
 </Page>

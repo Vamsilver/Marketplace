@@ -33,6 +33,7 @@ namespace Marketplace.ADOModel
         public bool isApproved { get; set; }
         public byte[] image { get; set; }
         public Nullable<int> AmountOfSales { get; set; }
+        public Nullable<decimal> OldCost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BasketProduct> BasketProduct { get; set; }

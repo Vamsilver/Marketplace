@@ -112,14 +112,24 @@
     <Compile Include="ADOModel\User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ADOModel\ViewProduct.cs" />
     <Compile Include="Pages\AuthorizationPage.xaml.cs">
       <DependentUpon>AuthorizationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BusketPage.xaml.cs">
+      <DependentUpon>BusketPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Byer\ByerHomePage.xaml.cs">
+      <DependentUpon>ByerHomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\RegistrationPage.xaml.cs">
       <DependentUpon>RegistrationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Seller\AddNewProductPage.xaml.cs">
       <DependentUpon>AddNewProductPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Seller\EditSellerProductPage.xaml.cs">
+      <DependentUpon>EditSellerProductPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Seller\SellerHomePage.xaml.cs">
       <DependentUpon>SellerHomePage.xaml</DependentUpon>
@@ -143,11 +153,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\BusketPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Byer\ByerHomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\RegistrationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Seller\AddNewProductPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Seller\EditSellerProductPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

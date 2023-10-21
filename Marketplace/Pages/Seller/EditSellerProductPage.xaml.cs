@@ -105,5 +105,10 @@ namespace Marketplace.Pages.Seller
         {
             NavigationService.Navigate(new SellerHomePage());
         }
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

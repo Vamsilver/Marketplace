@@ -21,18 +21,29 @@ namespace Marketplace.Pages.Seller
     /// </summary>
     public partial class SellerProductsPage : Page
     {
+        List<ViewProduct> products;
+
         public SellerProductsPage()
         {
             InitializeComponent();
 
-            List<ViewProduct> viewProductList = new List<ViewProduct>();
+            UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
 
-            var productList = App.Connection.Product.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.
+                Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList());
 
-            foreach (Product product in productList)
-                viewProductList.Add(new ViewProduct(product));
+            products.OrderBy(z => z.AmountOfSales);
 
-            ProductList.ItemsSource = viewProductList;
+            ProductList.ItemsSource = products;
+
+            var categoryList = App.Connection.ProductCategory.ToList();
+            var allProductCategory = new ProductCategory()
+            {
+                Title = "Все"
+            };
+            categoryList.Add(allProductCategory);
+            CategorySortComboBox.ItemsSource = categoryList;
+            CategorySortComboBox.SelectedItem = allProductCategory;
         }
 
         private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
@@ -75,10 +86,10 @@ namespace Marketplace.Pages.Seller
         {
             var newLike = new Like();
 
-            var currentProduct = ProductList.SelectedItem as Product;
-
-            if (currentProduct == null)
+            if (ProductList.SelectedItem == null)
                 return;
+
+            var currentProduct = Converter.ConvertToProduct(ProductList.SelectedItem as ViewProduct);
 
             newLike.Product = currentProduct;
             newLike.User = App.CurrentUser;
@@ -108,6 +119,79 @@ namespace Marketplace.Pages.Seller
         private void LogoButtonClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new SellerHomePage());
+        }
+
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CategorySortComboBox == null)
+                return;
+
+            products = OrderProductList(products);
+
+            ProductList.ItemsSource = products;
+            ProductList.Items.Refresh();
+        }
+
+        private List<ViewProduct> OrderProductList(List<ViewProduct> list)
+        {
+
+            var categorySortComboBoxSelectedItem = CategorySortComboBox.SelectedItem;
+
+
+            if (categorySortComboBoxSelectedItem != null)
+                if ((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
+                    list = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+
+            switch ((SortComboBox.SelectedItem as ComboBoxItem).Content.ToString())
+            {
+                case "Популярное":
+                    list = list.OrderBy(z => z.AmountOfSales).ToList();
+                    list.Reverse();
+                    break;
+                case "Любимое":
+                    list = list.OrderBy(z => z.GetAmountOfLikes).ToList();
+                    list.Reverse();
+                    break;
+                case "Сначала дешевые":
+                    list = list.OrderBy(z => z.Cost).ToList();
+                    break;
+                case "Сначала дорогие":
+                    list = list.OrderBy(z => z.Cost).ToList();
+                    list.Reverse();
+                    break;
+                case "По размеру скидки":
+                    list = list.OrderBy(z => z.OldCost - z.Cost).ToList();
+                    list.Reverse();
+                    break;
+            }
+
+            return list;
+        }
+
+        private void CategorySortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+
+            var categorySortComboBoxSelectedItem = CategorySortComboBox.SelectedItem as ProductCategory;
+
+            if (categorySortComboBoxSelectedItem.Title.Equals("Все"))
+                products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            else
+                products = products.Where(z => z.ProductCategory.Equals(categorySortComboBoxSelectedItem)).ToList();
+
+            var newList = OrderProductList(products);
+
+            if (newList != null)
+                products = newList;
+
+            ProductList.ItemsSource = products;
+            ProductList.Items.Refresh();
         }
     }
 }

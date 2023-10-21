@@ -82,6 +82,11 @@ namespace Marketplace.Pages.Seller
             MessageBox.Show("Успешное добавление товара!");
             NavigationService.GoBack();
         }
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 }

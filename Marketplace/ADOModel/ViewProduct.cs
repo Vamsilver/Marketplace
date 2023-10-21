@@ -36,5 +36,6 @@ namespace Marketplace.ADOModel
 
             AmountOfLikes = App.Connection.Like.Where(z => z.idProduct.Equals(product.idProduct)).Count();
         }
+
     }
 }

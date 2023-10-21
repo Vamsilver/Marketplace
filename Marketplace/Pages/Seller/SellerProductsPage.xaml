@@ -34,14 +34,44 @@
             </Button.Template>
         </Button>
         <TextBlock Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"><Hyperlink Click="LoginHyperlinkClick"><TextBlock Foreground="Gray" x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
-        <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб."/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
+        <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб."/>
+
+
+        <Button Grid.Column="1" Click="BusketButtonClick" BorderThickness="0" Grid.ColumnSpan="2" Width="80" HorizontalAlignment="Left" Foreground="White" Background="#e66001" FontSize="36">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">🛒</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+            <ComboBox x:Name="SortComboBox" SelectionChanged="SortComboBoxSelectionChanged" FontSize="16" Height="30" Width="180" Padding="10,5,0,0">
+                <ComboBoxItem IsSelected="True">
+                    Популярное
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Любимое
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Сначала дешевые
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Сначала дорогие
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    По размеру скидки
+                </ComboBoxItem>
+            </ComboBox>
+
+            <ComboBox x:Name="CategorySortComboBox" Margin="20,0,0,0" FontSize="16" Height="30" Width="180" Padding="10,5,0,0" SelectionChanged="CategorySortComboBoxSelectionChanged"></ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2">
             <Button FontSize="24" Width="300" Click="AddNewProductButtonClick">Добавить новый товар</Button>
         </StackPanel>
 
         <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontSize="32">Ваши товары</TextBlock>
-
-        <Button Click="LikedProductButtonClick" Grid.Column="4" FontSize="24" Grid.Row="2">Любимые товары</Button>
 
         <ListView Grid.Row="3" MouseDoubleClick="ProductListMouseDoubleClick" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
             <ListView.ItemsPanel>

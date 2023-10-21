@@ -29,7 +29,17 @@
         <Rectangle Fill="#e66001" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="8"></Rectangle>
         <TextBlock Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="42">MARKETPLACE</TextBlock>
         <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="31,0,0,0"><Hyperlink><TextBlock x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
-        <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб." />
+        <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб." />
+
+
+        <Button Grid.Column="1" Click="BusketButtonClick" BorderThickness="0" Grid.ColumnSpan="2" Width="80" HorizontalAlignment="Left" Foreground="White" Background="#e66001" FontSize="36">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">🛒</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
         <StackPanel Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <TextBlock FontSize="26" HorizontalAlignment="Center">Название</TextBlock>
             <TextBox x:Name="TitleTextBox" FontSize="26"></TextBox>

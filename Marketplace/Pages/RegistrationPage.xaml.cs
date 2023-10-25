@@ -94,6 +94,15 @@ namespace Marketplace.Pages
 
                 App.Connection.SaveChanges();
 
+                var newBusket = new Basket()
+                {
+                    idUser = App.Connection.User.Where(z => z.Name.Equals(newUser.Name) && z.Surname.Equals(newUser.Surname) && z.BirthDate.Equals(newUser.BirthDate)).FirstOrDefault().idUser,
+                };
+
+                App.Connection.Basket.Add(newBusket);
+
+                App.Connection.SaveChanges();
+
                 MessageBox.Show("Регистрация успешна");
 
                 NavigationService.Navigate(new AuthorizationPage());

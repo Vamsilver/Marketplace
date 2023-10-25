@@ -30,12 +30,44 @@ namespace Marketplace
             return product;
         }
 
+        public static Product ConvertToProduct(BusketProduct busketProduct)
+        {
+            Product product = new Product()
+            {
+                idProduct = busketProduct.idProduct,
+                Title = busketProduct.Title,
+                Description = busketProduct.Description,
+                idUser = busketProduct.idUser,
+                idProductBirthRate = busketProduct.idProductBirthRate,
+                idProductCategory = busketProduct.idProductCategory,
+                onSell = busketProduct.onSell,
+                Cost = busketProduct.Cost,
+                isApproved = busketProduct.isApproved,
+                image = busketProduct.image,
+                AmountOfSales = busketProduct.AmountOfSales,
+                OldCost = busketProduct.OldCost,
+            };
+
+            return product;
+        }
+
+
         public static List<ViewProduct> ConvertToListViewProducts(List<Product> list)
         {
             List<ViewProduct> viewProductList = new List<ViewProduct>();
 
             foreach (Product product in list)
                 viewProductList.Add(new ViewProduct(product));
+
+            return viewProductList;
+        }
+
+        public static List<BusketProduct> ConvertToListBusketProducts(List<Product> list)
+        {
+            List<BusketProduct> viewProductList = new List<BusketProduct>();
+
+            foreach (Product product in list)
+                viewProductList.Add(new BusketProduct(product));
 
             return viewProductList;
         }

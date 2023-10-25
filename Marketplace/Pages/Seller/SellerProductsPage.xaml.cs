@@ -28,6 +28,7 @@ namespace Marketplace.Pages.Seller
             InitializeComponent();
 
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
+            MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
 
             products = Converter.ConvertToListViewProducts(App.Connection.Product.
                 Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList());
@@ -60,39 +61,13 @@ namespace Marketplace.Pages.Seller
         {
             var newLike = new Like();
 
-            var currentProduct = ProductList.SelectedItem as Product;
-
-            if (currentProduct == null)
-                return;
-
-            newLike.Product = currentProduct;
-            newLike.User = App.CurrentUser;
-
-            var oldLike = App.Connection.Like.
-                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
-                           z.idUser.Equals(App.CurrentUser.idUser)).
-                FirstOrDefault();
-
-            if (oldLike != null)
-                return;
-            else
-            {
-                App.Connection.Like.Add(newLike);
-                App.Connection.SaveChanges();
-            }
-        }
-
-        private void LikedProductButtonClick(object sender, RoutedEventArgs e)
-        {
-            var newLike = new Like();
-
             if (ProductList.SelectedItem == null)
                 return;
 
             var currentProduct = Converter.ConvertToProduct(ProductList.SelectedItem as ViewProduct);
 
-            newLike.Product = currentProduct;
-            newLike.User = App.CurrentUser;
+            newLike.idProduct = currentProduct.idProduct;
+            newLike.idUser = App.CurrentUser.idUser;
 
             var oldLike = App.Connection.Like.
                 Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
@@ -100,11 +75,18 @@ namespace Marketplace.Pages.Seller
                 FirstOrDefault();
 
             if (oldLike != null)
+            {
+                MessageBox.Show("Уже у вас в избранном", "Упс");
                 return;
+            }
             else
             {
                 App.Connection.Like.Add(newLike);
                 App.Connection.SaveChanges();
+
+                this.NavigationService.Refresh();
+
+                MessageBox.Show("Успешно добавлено в избранное!)");
             }
         }
 
@@ -124,7 +106,7 @@ namespace Marketplace.Pages.Seller
 
         private void BusketButtonClick(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new BusketPage());
         }
 
         private void SortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -154,7 +136,7 @@ namespace Marketplace.Pages.Seller
                     list = list.OrderBy(z => z.AmountOfSales).ToList();
                     list.Reverse();
                     break;
-                case "Любимое":
+                case "Избранное":
                     list = list.OrderBy(z => z.GetAmountOfLikes).ToList();
                     list.Reverse();
                     break;
@@ -192,6 +174,43 @@ namespace Marketplace.Pages.Seller
 
             ProductList.ItemsSource = products;
             ProductList.Items.Refresh();
+        }
+
+        private void PlusButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
+        }
+
+        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
+        }
+
+        private void AddProductToBasketButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ProductList.SelectedItem == null)
+                return;
+
+            var newProductInBasket = new BasketProduct()
+            {
+                idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket,
+                idProduct = Converter.ConvertToProduct(ProductList.SelectedItem as ViewProduct).idProduct,
+                Count = 1
+            };
+
+            var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket;
+            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault();
+
+            if (oldBasketProductInBasket != null)
+            {
+                MessageBox.Show("Товар уже у вас в корзине!)", "Упс");
+                return;
+            }
+
+            App.Connection.BasketProduct.Add(newProductInBasket);
+            App.Connection.SaveChanges();
+
+            MessageBox.Show("Товар успешно добавлен в корзину!)");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Marketplace.ADOModel;
+using Marketplace.Pages.Seller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -15,22 +15,28 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Marketplace.Pages.Seller
+namespace Marketplace.Pages.Byer
 {
     /// <summary>
-    /// Interaction logic for SellerHomePage.xaml
+    /// Interaction logic for BuyerLikedProductsPage.xaml
     /// </summary>
-    public partial class SellerHomePage : Page
+    public partial class BuyerLikedProductsPage : Page
     {
-        List<ViewProduct> products;
+        List<ViewProduct> products = new List<ViewProduct>();
 
-        public SellerHomePage()
+        public BuyerLikedProductsPage()
         {
             InitializeComponent();
+
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
 
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            var likedProducts = App.Connection.Like.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+
+            foreach(var likedProduct in likedProducts)
+            {
+                products.Add(new ViewProduct(App.Connection.Product.Where(z => z.idProduct.Equals(likedProduct.idProduct)).FirstOrDefault()));
+            }
 
             products.OrderBy(z => z.AmountOfSales);
 
@@ -46,9 +52,14 @@ namespace Marketplace.Pages.Seller
             CategorySortComboBox.SelectedItem = allProductCategory;
         }
 
-        private void NameHyperlinkClick(object sender, RoutedEventArgs e)
+        private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SellerProductsPage());
+
+        }
+
+        private void AddNewProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AddNewProductPage());
         }
 
         private void LikeButtonClick(object sender, RoutedEventArgs e)
@@ -64,13 +75,13 @@ namespace Marketplace.Pages.Seller
             newLike.idUser = App.CurrentUser.idUser;
 
             var oldLike = App.Connection.Like.
-                Where(z => z.idProduct.Equals(currentProduct.idProduct) && 
+                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
                            z.idUser.Equals(App.CurrentUser.idUser)).
                 FirstOrDefault();
 
-            if ( oldLike != null)
+            if (oldLike != null)
             {
-                MessageBox.Show("Уже у вас в изрбранном", "Упс");
+                MessageBox.Show("Уже у вас в избранном", "Упс");
                 return;
             }
             else
@@ -84,7 +95,21 @@ namespace Marketplace.Pages.Seller
             }
         }
 
-        private void NavigateToBasketPageButtonClick(object sender, RoutedEventArgs e)
+        private void ProductListMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ProductList.SelectedItem != null)
+            {
+                NavigationService.Navigate(new EditSellerProductPage(((Product)ProductList.SelectedItem).idProduct));
+            }
+        }
+
+        private void LogoButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new SellerHomePage());
+        }
+
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new BusketPage());
         }
@@ -107,8 +132,19 @@ namespace Marketplace.Pages.Seller
 
 
             if (categorySortComboBoxSelectedItem != null)
-                if((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
-                    list = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+                if ((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
+                {
+                    products.Clear();
+
+                    var likedProducts = App.Connection.Like.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+
+                    foreach (var likedProduct in likedProducts)
+                    {
+                        products.Add(new ViewProduct(App.Connection.Product.Where(z => z.idProduct.Equals(likedProduct.idProduct)).FirstOrDefault()));
+                    }
+
+                    ProductList.ItemsSource = products;
+                }
 
             switch ((SortComboBox.SelectedItem as ComboBoxItem).Content.ToString())
             {
@@ -138,7 +174,14 @@ namespace Marketplace.Pages.Seller
 
         private void CategorySortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            products.Clear();
+
+            var likedProducts = App.Connection.Like.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).ToList();
+
+            foreach (var likedProduct in likedProducts)
+            {
+                products.Add(new ViewProduct(App.Connection.Product.Where(z => z.idProduct.Equals(likedProduct.idProduct)).FirstOrDefault()));
+            }
 
             var categorySortComboBoxSelectedItem = CategorySortComboBox.SelectedItem as ProductCategory;
 
@@ -149,7 +192,7 @@ namespace Marketplace.Pages.Seller
 
             var newList = OrderProductList(products);
 
-            if(newList != null)
+            if (newList != null)
                 products = newList;
 
             ProductList.ItemsSource = products;
@@ -157,6 +200,11 @@ namespace Marketplace.Pages.Seller
         }
 
         private void PlusButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
+        }
+
+        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new QRPage());
         }
@@ -174,9 +222,9 @@ namespace Marketplace.Pages.Seller
             };
 
             var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket;
-            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault(); 
+            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault();
 
-            if(oldBasketProductInBasket != null)
+            if (oldBasketProductInBasket != null)
             {
                 MessageBox.Show("Товар уже у вас в корзине!)", "Упс");
                 return;
@@ -186,11 +234,6 @@ namespace Marketplace.Pages.Seller
             App.Connection.SaveChanges();
 
             MessageBox.Show("Товар успешно добавлен в корзину!)");
-        }
-
-        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new QRPage());
         }
     }
 }

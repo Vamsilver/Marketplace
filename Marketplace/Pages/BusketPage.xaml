@@ -5,10 +5,90 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Marketplace.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Title="BusketPage">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="29*"/>
+            <ColumnDefinition Width="236*"/>
+            <ColumnDefinition Width="361*"/>
+            <ColumnDefinition Width="218*"/>
+            <ColumnDefinition Width="151*"/>
+            <ColumnDefinition Width="236*"/>
+            <ColumnDefinition Width="29*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="276*"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+        <Rectangle Fill="#e66001" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="9"></Rectangle>
+
+        <Button Grid.Column="6" Grid.ColumnSpan="2" Click="PlusButtonClick" BorderThickness="0" Width="80" HorizontalAlignment="Right" Foreground="White" Background="#e66001" FontSize="36">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">➕</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <TextBlock Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Left" ><Hyperlink Click="NameHyperlinkClick"><TextBlock x:Name="UserNameTextBlock" FontSize="28" Text="Петров Р."></TextBlock></Hyperlink></TextBlock>
+
+        <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Hyperlink Click="BalanceHyperlinkClick">
+                <TextBlock  x:Name="MoneyTextBlock" FontSize="28" Text="9999.99 руб."/>
+            </Hyperlink>
+        </TextBlock>
+
+        <Button Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="LogoButtonClick" BorderThickness="0" Background="#e66001" Grid.ColumnSpan="3">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  FontSize="42">MARKETPLACE</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <ListView x:Name="BusketList" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="4" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="15,15,15,0" Background="#FEF9EF">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="20" CanHorizontallyScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <Image Width="100" Height="100" Source="{Binding image}" Margin="20,0,40,0"></Image>
+                        <StackPanel Margin="0,0,20,0" Width="280">
+                            <TextBlock FontSize="20" Height="70" TextWrapping="Wrap" Text="{Binding Title}"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Width="90" Height="30" Click="LikeProductButtonClick">В избранное</Button>
+                                <Button Width="70" Click="DeleteProductFromBasketButtonClick">Удалить</Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock FontSize="26" Text="{Binding Path=Cost, StringFormat=' {0} ₽' }"></TextBlock>
+                            <TextBlock FontSize="15" Foreground="Gray" Text="{Binding Path=OldCost, StringFormat=' {0} ₽' }"  Style="{StaticResource Strikethrough}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Top" Margin="60,0,0,0" Orientation="Horizontal">
+                            <Button Width="30" Height="35" Click="AddCountOfProductButtonClick">➕</Button>
+                            <TextBlock FontSize="36" Text="{Binding GetCountInBasket}" MinWidth="25"></TextBlock>
+                            <Button Width="30" Height="35" Click="ReduceCountOfProductButtonClick">➖</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         
+        <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.Column="5" Margin="20,20,20,0" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
+                <TextBlock FontSize="32">Ваша корзина</TextBlock>
+                <TextBlock x:Name="AmountOfProductsTextBlock" VerticalAlignment="Center" Foreground="Gray" Margin="25,0,0,0" FontSize="14"> 6 товаров</TextBlock>
+            </StackPanel>
+            <TextBlock FontSize="26" Margin="0,0,0,15" x:Name="TotalCostTextBlock">Товаров на 3500</TextBlock>
+            <TextBlock FontSize="26" Foreground="Red" x:Name="TotalDiscountTextBlock">Скидка: - 6350</TextBlock>
+
+            <Button x:Name="BuyButton" Click="BuyButtonClick" Background="#0ead43" FontSize="46" Margin="0,30,0,0">КУПИТЬ</Button>
+        </StackPanel>
     </Grid>
+
 </Page>

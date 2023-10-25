@@ -32,6 +32,9 @@ namespace Marketplace.Pages.Seller
             DataContext = product;
             BirthRateComboBox.ItemsSource = App.Connection.ProductBirthRate.ToList();
             CategoryComboBox.ItemsSource = App.Connection.ProductCategory.ToList();
+
+            UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
+            MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
         }
         private void SelectImage()
         {
@@ -39,12 +42,15 @@ namespace Marketplace.Pages.Seller
             openFileDialog.Filter = "Files|*.jpg;*.jpeg;*.png;";
             openFileDialog.Title = "Выберите изображение для товара.";
             openFileDialog.ShowDialog();
-            imageBytes = File.ReadAllBytes(openFileDialog.FileName);
-            if(String.IsNullOrEmpty(openFileDialog.FileName))
+            
+            if (String.IsNullOrEmpty(openFileDialog.FileName))
             {
                 MessageBox.Show("Пустое изображение");
                 return;
             }
+            
+            imageBytes = File.ReadAllBytes(openFileDialog.FileName);
+
             product.image = imageBytes;
             BindingOperations.GetBindingExpressionBase(ProductImage, Image.SourceProperty).UpdateTarget();
         }
@@ -85,7 +91,22 @@ namespace Marketplace.Pages.Seller
 
         private void BusketButtonClick(object sender, RoutedEventArgs e)
         {
+            NavigationService.Navigate(new BusketPage());
+        }
 
+        private void LogoButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new SellerHomePage());
+        }
+
+        private void PlusButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
+        }
+
+        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
         }
     }
 

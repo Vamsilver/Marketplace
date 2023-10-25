@@ -27,9 +27,29 @@
             <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Rectangle Fill="#e66001" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="8"></Rectangle>
-        <TextBlock Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="42">MARKETPLACE</TextBlock>
-        <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="31,0,0,0"><Hyperlink><TextBlock x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
-        <TextBlock x:Name="MoneyTextBlock" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="28" Text="9999.99 руб." />
+        <Button Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Click="LogoButtonClick" BorderThickness="0" Background="#e66001">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock  FontSize="42">MARKETPLACE</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button Grid.Column="5" Click="PlusButtonClick" BorderThickness="0" Grid.ColumnSpan="2" Width="80" HorizontalAlignment="Right" Foreground="White" Background="#e66001" FontSize="36">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">➕</TextBlock>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left"><Hyperlink><TextBlock x:Name="UserNameTextBlock" FontSize="28" Text="Габдрахманов Р."></TextBlock></Hyperlink></TextBlock>
+
+        <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Hyperlink>
+                <TextBlock  x:Name="MoneyTextBlock" FontSize="28" Text="9999.99 руб."/>
+            </Hyperlink>
+        </TextBlock>
 
 
         <Button Grid.Column="1" Click="BusketButtonClick" BorderThickness="0" Grid.ColumnSpan="2" Width="80" HorizontalAlignment="Left" Foreground="White" Background="#e66001" FontSize="36">

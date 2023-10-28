@@ -1,12 +1,12 @@
-﻿<Page x:Class="Marketplace.Pages.Seller.SellerProductsPage"
+﻿<Page x:Class="Marketplace.Pages.Admin.AdminWorkPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Marketplace.Pages.Seller"
+      xmlns:local="clr-namespace:Marketplace.Pages.Admin"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="SellerProductsPage">
+      Title="AdminWorkPage">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -60,16 +60,10 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left">
             <ComboBox x:Name="SortComboBox" SelectionChanged="SortComboBoxSelectionChanged" FontSize="16" Height="30" Width="180" Padding="10,5,0,0">
                 <ComboBoxItem IsSelected="True">
-                    Популярное
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Избранное
+                    Сначала дорогие
                 </ComboBoxItem>
                 <ComboBoxItem>
                     Сначала дешевые
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Сначала дорогие
                 </ComboBoxItem>
                 <ComboBoxItem>
                     По размеру скидки
@@ -79,49 +73,51 @@
             <ComboBox x:Name="CategorySortComboBox" Margin="20,0,0,0" FontSize="16" Height="30" Width="180" Padding="10,5,0,0" SelectionChanged="CategorySortComboBoxSelectionChanged"></ComboBox>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2">
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2">
             <Button FontSize="24" Width="300" Click="AddNewProductButtonClick">Добавить новый товар</Button>
-        </StackPanel>
+        </StackPanel>-->
 
-        <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontSize="32">Ваши товары</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="3" 
+                   HorizontalAlignment="Center" 
+                   FontSize="32">
+            Товары на проверку
+        </TextBlock>
 
-        <ListView Grid.Row="3" MouseDoubleClick="ProductListMouseDoubleClick" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
+        <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" x:Name="ProductList" BorderBrush="#FEF9EF" Background="#FEF9EF" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=30}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="4"></UniformGrid>
+                    <UniformGrid Columns="3"></UniformGrid>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical" Width="260" Height="400" Margin="20 0 20 20">
+                    <StackPanel Orientation="Vertical" Width="360" Height="490" Margin="20 0 20 20">
 
                         <Image Source="{Binding image}" Width="240" Height="200" Margin="0,10,0,0"></Image>
 
                         <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" TextWrapping="Wrap" FontSize="22" Margin="10,0,10,0" Height="60" ></TextBlock>
                         <TextBlock x:Name="CostTextBlock" Text="{Binding Path=Cost, StringFormat=' {0} ₽' }" FontSize="36" FontWeight="Bold"></TextBlock>
-                        <TextBlock x:Name="OldCostTextBlock" Visibility="{Binding GetVisibilityOldCost}"  Text="{Binding Path=OldCost, StringFormat=' {0} ₽'}" FontSize="24" Foreground="Gray" Style="{StaticResource Strikethrough}"></TextBlock>
+                        <TextBlock x:Name="OldCostTextBlock"  Visibility="{Binding GetVisibilityOldCost}"  Text="{Binding Path=OldCost, StringFormat=' {0} ₽'}" FontSize="24" Foreground="Gray" Style="{StaticResource Strikethrough}"></TextBlock>
 
 
-                        <DockPanel Margin="0,12,0,0" LastChildFill="True" HorizontalAlignment="Center" Width="260">
-                            <Button Click="LikeButtonClick" DockPanel.Dock="Left" BorderThickness="0" Width="45" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40">
+                        <TextBlock Text="{Binding Description}" FontSize="24"  TextWrapping="Wrap" Height="93"></TextBlock>
+
+                        <UniformGrid Margin="0,12,0,0" HorizontalAlignment="Center" Width="260">
+                            <Button Click="ApprovedProductButtonClick" DockPanel.Dock="Left" BorderThickness="0" Width="45" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40">
                                 <Button.Template>
                                     <ControlTemplate>
-                                        <TextBlock>❤</TextBlock>
+                                        <TextBlock>✔️</TextBlock>
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                            <StackPanel>
-                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=AmountOfSales, StringFormat=' {0} купили' }"></TextBlock>
-                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center" Text="{Binding Path=GetAmountOfLikes, StringFormat=' {0} лайкнули' }"></TextBlock>
-                            </StackPanel>
-                            <Button Click="AddProductToBasketButtonClick" Padding="5,-5,5,0" DockPanel.Dock="Right" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40" Width="45">
+                            <Button Click="CancelProductButtonClick" Padding="5,-5,5,0" DockPanel.Dock="Right" Background="#FEF9EF" Foreground="Red" FontSize="24" Height="40" Width="45">
                                 <Button.Template>
                                     <ControlTemplate>
-                                        <TextBlock>🛒</TextBlock>
+                                        <TextBlock>❌</TextBlock>
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                        </DockPanel>
+                        </UniformGrid>
 
                         <Separator Height="5" Opacity="0"/>
                     </StackPanel>

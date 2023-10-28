@@ -139,12 +139,12 @@ namespace Marketplace.Pages.Byer
 
         private void CategorySortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
 
             var categorySortComboBoxSelectedItem = CategorySortComboBox.SelectedItem as ProductCategory;
 
             if (categorySortComboBoxSelectedItem.Title.Equals("Все"))
-                products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+                products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
             else
                 products = products.Where(z => z.ProductCategory.Equals(categorySortComboBoxSelectedItem)).ToList();
 
@@ -169,12 +169,12 @@ namespace Marketplace.Pages.Byer
 
             var newProductInBasket = new BasketProduct()
             {
-                idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket,
+                idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket,
                 idProduct = Converter.ConvertToProduct(ProductList.SelectedItem as ViewProduct).idProduct,
                 Count = 1
             };
 
-            var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket;
+            var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket;
             var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault();
 
             if (oldBasketProductInBasket != null)

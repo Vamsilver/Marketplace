@@ -1,4 +1,5 @@
-﻿using Marketplace.Pages.Byer;
+﻿using Marketplace.Pages.Admin;
+using Marketplace.Pages.Byer;
 using Marketplace.Pages.Seller;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Marketplace.Pages
                 switch (App.CurrentUser.idRole)
                 {
                     case 1:
-                        //Page = new ();
+                        Page = new AdminHomePage();
                         break;
                     case 2:
                         Page = new SellerHomePage();

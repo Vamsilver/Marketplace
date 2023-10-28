@@ -1,4 +1,5 @@
 ﻿using Marketplace.ADOModel;
+using Marketplace.Pages.Seller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -15,22 +15,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Marketplace.Pages.Seller
+namespace Marketplace.Pages.Admin
 {
     /// <summary>
-    /// Interaction logic for SellerHomePage.xaml
+    /// Interaction logic for AdminHomePage.xaml
     /// </summary>
-    public partial class SellerHomePage : Page
+    public partial class AdminHomePage : Page
     {
         List<ViewProduct> products;
 
-        public SellerHomePage()
+        public AdminHomePage()
         {
             InitializeComponent();
+
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
 
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
 
             products.OrderBy(z => z.AmountOfSales);
 
@@ -48,7 +49,7 @@ namespace Marketplace.Pages.Seller
 
         private void NameHyperlinkClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SellerProductsPage());
+            NavigationService.Navigate(new AdminWorkPage());
         }
 
         private void LikeButtonClick(object sender, RoutedEventArgs e)
@@ -64,11 +65,11 @@ namespace Marketplace.Pages.Seller
             newLike.idUser = App.CurrentUser.idUser;
 
             var oldLike = App.Connection.Like.
-                Where(z => z.idProduct.Equals(currentProduct.idProduct) && 
+                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
                            z.idUser.Equals(App.CurrentUser.idUser)).
                 FirstOrDefault();
 
-            if ( oldLike != null)
+            if (oldLike != null)
             {
                 MessageBox.Show("Уже у вас в изрбранном", "Упс");
                 return;
@@ -78,7 +79,7 @@ namespace Marketplace.Pages.Seller
                 App.Connection.Like.Add(newLike);
                 App.Connection.SaveChanges();
 
-                this.NavigationService.Refresh();
+                NavigationService.Refresh();
 
                 MessageBox.Show("Успешно добавлено в избранное!)");
             }
@@ -107,7 +108,7 @@ namespace Marketplace.Pages.Seller
 
 
             if (categorySortComboBoxSelectedItem != null)
-                if((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
+                if ((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
                     list = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
 
             switch ((SortComboBox.SelectedItem as ComboBoxItem).Content.ToString())
@@ -149,7 +150,7 @@ namespace Marketplace.Pages.Seller
 
             var newList = OrderProductList(products);
 
-            if(newList != null)
+            if (newList != null)
                 products = newList;
 
             ProductList.ItemsSource = products;
@@ -174,9 +175,9 @@ namespace Marketplace.Pages.Seller
             };
 
             var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket;
-            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault(); 
+            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault();
 
-            if(oldBasketProductInBasket != null)
+            if (oldBasketProductInBasket != null)
             {
                 MessageBox.Show("Товар уже у вас в корзине!)", "Упс");
                 return;

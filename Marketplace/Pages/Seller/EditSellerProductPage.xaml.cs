@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,18 @@ namespace Marketplace.Pages.Seller
             BirthRateComboBox.SelectedItem = product.ProductBirthRate;
             DesriptionTextBox.Text = product.Description;
             imageBytes = product.image;
+            IsOnSellCheckBox.IsChecked = product.onSell;
+
+            if(product.isApproved)
+            {
+                isApprovedTextBlock.Text = "ДА";
+                isApprovedTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                isApprovedTextBlock.Text = "НЕТ";
+                isApprovedTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+            }
 
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
@@ -76,6 +89,12 @@ namespace Marketplace.Pages.Seller
 
         private void EditProductButtonClick(object sender, RoutedEventArgs e)
         {
+            if(!product.isApproved)
+            {
+                MessageBox.Show("Товар нельзя изменить, пока его не одобрят!");
+                return;
+            }
+
             try
             {
                 product.Title = TitleTextBox.Text;
@@ -83,14 +102,12 @@ namespace Marketplace.Pages.Seller
                 product.User = App.CurrentUser;
                 product.ProductCategory = (ProductCategory)CategoryComboBox.SelectedItem;
                 product.ProductBirthRate = (ProductBirthRate)BirthRateComboBox.SelectedItem;
-                product.onSell = false;
 
                 var newCost = Decimal.Parse(CostTextBox.Text.Replace('.', ','));
 
                 if (product.Cost != newCost)
                     product.OldCost = product.Cost;
                 product.Cost = newCost;
-                product.isApproved = false;
                 product.image = imageBytes;
                 product.AmountOfSales = 0;
             }
@@ -124,6 +141,23 @@ namespace Marketplace.Pages.Seller
         private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new QRPage());
+        }
+
+        private void IsOnSellCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            SetOnSellInProduct();
+        }
+
+        private void IsOnSellCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SetOnSellInProduct();
+        }
+
+        private void SetOnSellInProduct()
+        {
+            product.onSell = IsOnSellCheckBox.IsChecked.Value;
+            App.Connection.Product.AddOrUpdate(product);
+            App.Connection.SaveChanges();
         }
     }
 }

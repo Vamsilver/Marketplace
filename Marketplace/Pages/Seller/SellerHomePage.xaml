@@ -94,7 +94,7 @@
 
                         <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" TextWrapping="Wrap" FontSize="22" Margin="10,0,10,0" Height="60" ></TextBlock>
                         <TextBlock x:Name="CostTextBlock" Text="{Binding Path=Cost, StringFormat=' {0} ₽' }" FontSize="36" FontWeight="Bold"></TextBlock>
-                        <TextBlock x:Name="OldCostTextBlock" Text="{Binding Path=OldCost, StringFormat=' {0} ₽'}" FontSize="24" Foreground="Gray" Style="{StaticResource Strikethrough}"></TextBlock>
+                        <TextBlock x:Name="OldCostTextBlock" Text="{Binding Path=OldCost, StringFormat=' {0} ₽'}" Visibility="{Binding GetVisibilityOldCost}"  FontSize="24" Foreground="Gray" Style="{StaticResource Strikethrough}"></TextBlock>
 
 
                         <DockPanel Margin="0,12,0,0" LastChildFill="True" HorizontalAlignment="Center" Width="260">

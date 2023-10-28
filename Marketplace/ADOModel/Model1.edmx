@@ -19,6 +19,7 @@
           </Key>
           <Property Name="idBasket" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idUser" Type="int" Nullable="false" />
+          <Property Name="PurchaseDate" Type="date" />
         </EntityType>
         <EntityType Name="BasketProduct">
           <Key>
@@ -392,6 +393,7 @@
           <Property Name="idUser" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MarketplaceModel.FK_Basket_User" FromRole="Basket" ToRole="User" />
           <NavigationProperty Name="BasketProduct" Relationship="MarketplaceModel.FK_BasketProduct_Basket" FromRole="Basket" ToRole="BasketProduct" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="BasketProduct">
           <Key>
@@ -661,6 +663,7 @@
           <EntitySetMapping Name="Basket">
             <EntityTypeMapping TypeName="MarketplaceModel.Basket">
               <MappingFragment StoreEntitySet="Basket">
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
                 <ScalarProperty Name="idUser" ColumnName="idUser" />
                 <ScalarProperty Name="idBasket" ColumnName="idBasket" />
               </MappingFragment>

@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Marketplace.ADOModel
 {
     public class ViewProduct : Product
     {
         int AmountOfLikes = 0;
+        Visibility VisibiliityOldCost = Visibility.Visible;
 
         public int GetAmountOfLikes => AmountOfLikes;
+        public Visibility GetVisibilityOldCost => VisibiliityOldCost;
+
 
         public ViewProduct(Product product)
         {
@@ -27,6 +31,10 @@ namespace Marketplace.ADOModel
             image = product.image;
             AmountOfSales = product.AmountOfSales;
             OldCost = product.OldCost;
+
+            if (OldCost == null)
+                VisibiliityOldCost = Visibility.Hidden;
+
             BasketProduct = product.BasketProduct;
             Like = product.Like;
             ProductBirthRate = product.ProductBirthRate;

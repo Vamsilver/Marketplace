@@ -58,7 +58,6 @@ namespace Marketplace.Pages.Seller
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
             SelectImage();
-           
         }
 
         private void AddnewProductButtonClick(object sender, RoutedEventArgs e)
@@ -85,7 +84,16 @@ namespace Marketplace.Pages.Seller
             App.Connection.Product.Add(product);
             App.Connection.SaveChanges();
 
-            MessageBox.Show("Успешное добавление товара!");
+            var productAddRequest = new ProductAddRequest()
+            {
+                idProduct = product.idProduct,
+                idUser = product.idUser,
+            };
+
+            App.Connection.ProductAddRequest.Add(productAddRequest);
+            App.Connection.SaveChanges();
+
+            MessageBox.Show("Администратор одобрит заявку в ближайшее время)","Успешное добавление заявки на добавление товара!");
             NavigationService.GoBack();
         }
 

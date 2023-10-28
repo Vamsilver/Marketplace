@@ -19,28 +19,33 @@ using System.Windows.Shapes;
 namespace Marketplace.Pages
 {
     /// <summary>
-    /// Interaction logic for BusketPage.xaml
+    /// Interaction logic for OldBusketPage.xaml
     /// </summary>
-    public partial class BusketPage : Page
+    public partial class OldBusketPage : Page
     {
         int idBasket;
 
-        List<BusketProduct> busketProducts= new List<BusketProduct>();  
+        List<OldBusketProduct> busketProducts = new List<OldBusketProduct>();
 
-        public BusketPage()
+        public OldBusketPage()
         {
             InitializeComponent();
+        }
+
+        public OldBusketPage(int idBasket)
+        {
+            InitializeComponent();
+
+            this.idBasket = idBasket;
 
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
 
-            idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket;
-
             var listBasketProductsFromDb = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket)).ToList();
-            
-            foreach(var basketProduct in listBasketProductsFromDb)
+
+            foreach (var basketProduct in listBasketProductsFromDb)
             {
-                busketProducts.Add(new BusketProduct(App.Connection.Product.Where(z => z.idProduct.Equals(basketProduct.idProduct)).FirstOrDefault()));
+                busketProducts.Add(new OldBusketProduct(App.Connection.Product.Where(z => z.idProduct.Equals(basketProduct.idProduct)).FirstOrDefault()));
             }
 
             BusketList.ItemsSource = busketProducts;
@@ -94,13 +99,6 @@ namespace Marketplace.Pages
                 return null;
         }
 
-        private void DeleteProductFromBasketButtonClick(object sender, RoutedEventArgs e)
-        {
-            DeleteSelectedProductFromBasket();
-         
-            RefreshList();
-        }
-
         private void DeleteSelectedProductFromBasket()
         {
             if (!IsSelectedItemInBusketListNotNull())
@@ -115,24 +113,6 @@ namespace Marketplace.Pages
             App.Connection.SaveChanges();
         }
 
-        private void AddCountOfProductButtonClick(object sender, RoutedEventArgs e)
-        {
-            if(!IsSelectedItemInBusketListNotNull())
-                return;
-
-            var currentBusketProduct = GetSelectedItemInBusketList();
-
-            currentBusketProduct.GetCountInBasket += 1;
-
-            var basketProduct = App.Connection.BasketProduct.Where(z => z.idProduct.Equals(currentBusketProduct.idProduct) && z.idBasket.Equals(idBasket)).FirstOrDefault();
-            basketProduct.Count = currentBusketProduct.GetCountInBasket;
-
-            App.Connection.BasketProduct.AddOrUpdate(basketProduct);
-            App.Connection.SaveChanges();
-
-            RefreshList();
-        }
-
         private void RefreshList()
         {
             busketProducts.Clear();
@@ -141,59 +121,28 @@ namespace Marketplace.Pages
 
             foreach (var basketProduct in listBasketProductsFromDb)
             {
-                busketProducts.Add(new BusketProduct(App.Connection.Product.Where(z => z.idProduct.Equals(basketProduct.idProduct)).FirstOrDefault()));
+                busketProducts.Add(new OldBusketProduct(App.Connection.Product.Where(z => z.idProduct.Equals(basketProduct.idProduct)).FirstOrDefault()));
             }
 
             BusketList.ItemsSource = busketProducts;
             BusketList.Items.Refresh();
 
-
             decimal totalCost = 0;
             decimal? totalDiscount = 0;
             int totalAmountOfProducts = 0;
 
-            foreach(var busketProduct in busketProducts)
+            foreach (var busketProduct in busketProducts)
             {
                 totalCost += busketProduct.Cost * busketProduct.GetCountInBasket;
-                if(busketProduct.OldCost != null)
+                if (busketProduct.OldCost != null)
                     totalDiscount += (busketProduct.OldCost - busketProduct.Cost) * busketProduct.GetCountInBasket;
                 totalAmountOfProducts += busketProduct.GetCountInBasket;
             }
 
             AmountOfProductsTextBlock.Text = "Товаров:  " + totalAmountOfProducts + " шт.";
 
-            TotalCostTextBlock.Text = "Общая сумма:  " + totalCost.ToString() + " ₽"; 
+            TotalCostTextBlock.Text = "Общая сумма:  " + totalCost.ToString() + " ₽";
             TotalDiscountTextBlock.Text = "Общая скидка:  " + totalDiscount.ToString() + " ₽";
-        }
-
-        private void ReduceCountOfProductButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (!IsSelectedItemInBusketListNotNull())
-                return;
-
-            var currentBusketProduct = GetSelectedItemInBusketList();
-
-            if (currentBusketProduct.GetCountInBasket.Equals(1))
-            {
-                var messageResult = MessageBox.Show("Вы уверены, что хотите удалить товар из корзины?", "Подвтердите удаление", MessageBoxButton.YesNo);
-
-                if (messageResult.Equals(MessageBoxResult.Yes))
-                {
-                    DeleteSelectedProductFromBasket();
-                    RefreshList();
-                    return;
-                }
-            }
-
-            currentBusketProduct.GetCountInBasket -= 1;
-
-            var basketProduct = App.Connection.BasketProduct.Where(z => z.idProduct.Equals(currentBusketProduct.idProduct) && z.idBasket.Equals(idBasket)).FirstOrDefault();
-            basketProduct.Count = currentBusketProduct.GetCountInBasket;
-
-            App.Connection.BasketProduct.AddOrUpdate(basketProduct);
-            App.Connection.SaveChanges();
-
-            RefreshList();
         }
 
 
@@ -215,50 +164,6 @@ namespace Marketplace.Pages
         private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new QRPage());
-        }
-
-        private void BuyButtonClick(object sender, RoutedEventArgs e)
-        {
-            if(BusketList.Items.Count == 0)
-            {
-                MessageBox.Show("Ваша корзина пуста(");
-                return;
-            }
-
-            if(App.CurrentUser.Balance < Decimal.Parse(TotalCostTextBlock.Text.Split(' ')[3]))
-            {
-                MessageBox.Show("На счету недостаточно средств(", "Вы можете пополнить баланс нажав на \"+\"");
-                return;
-            }
-
-            var basket = App.Connection.Basket.FirstOrDefault(z => z.idBasket.Equals(idBasket));
-
-            basket.PurchaseDate = DateTime.Now;
-
-            App.Connection.Basket.AddOrUpdate(basket);
-
-            App.Connection.Basket.Add(new Basket()
-            {
-                idUser = basket.idUser,
-            });
-
-            foreach(var item in busketProducts)
-            {
-                var product = App.Connection.Product.FirstOrDefault(z => z.idProduct.Equals(item.idProduct));
-                product.AmountOfSales += item.GetCountInBasket;
-
-                App.Connection.Product.AddOrUpdate(product);
-            }
-
-            App.Connection.SaveChanges();
-
-            MessageBox.Show("Товары успешно куплены!");
-            RefreshList();
-        }
-
-        private void ShowHistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new PurchaseHistoryPage());
         }
     }
 }

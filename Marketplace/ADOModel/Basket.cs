@@ -22,6 +22,7 @@ namespace Marketplace.ADOModel
     
         public int idBasket { get; set; }
         public int idUser { get; set; }
+        public Nullable<System.DateTime> PurchaseDate { get; set; }
     
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -57,10 +57,6 @@ namespace Marketplace.Pages.Byer
 
         }
 
-        private void AddNewProductButtonClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new AddNewProductPage());
-        }
 
         private void LikeButtonClick(object sender, RoutedEventArgs e)
         {
@@ -89,23 +85,15 @@ namespace Marketplace.Pages.Byer
                 App.Connection.Like.Add(newLike);
                 App.Connection.SaveChanges();
 
-                this.NavigationService.Refresh();
+                NavigationService.Refresh();
 
                 MessageBox.Show("Успешно добавлено в избранное!)");
             }
         }
 
-        private void ProductListMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (ProductList.SelectedItem != null)
-            {
-                NavigationService.Navigate(new EditSellerProductPage(((Product)ProductList.SelectedItem).idProduct));
-            }
-        }
-
         private void LogoButtonClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SellerHomePage());
+            NavigationService.Navigate(new ByerHomePage());
         }
 
 

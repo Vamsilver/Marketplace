@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Windows;
 
 namespace Marketplace.ADOModel
 {
-    public class BusketProduct : Product
+    public class OldBusketProduct : Product
     {
         int count = 1;
 
@@ -20,7 +21,7 @@ namespace Marketplace.ADOModel
         Visibility VisibiliityOldCost = Visibility.Visible;
         public Visibility GetVisibilityOldCost => VisibiliityOldCost;
 
-        public BusketProduct(Product product)
+        public OldBusketProduct(Product product)
         {
             idProduct = product.idProduct;
 
@@ -38,7 +39,7 @@ namespace Marketplace.ADOModel
 
             if (OldCost == null)
                 VisibiliityOldCost = Visibility.Hidden;
-            
+
             BasketProduct = product.BasketProduct;
             Like = product.Like;
             ProductBirthRate = product.ProductBirthRate;
@@ -46,7 +47,7 @@ namespace Marketplace.ADOModel
             User = product.User;
             ProductAddRequest = product.ProductAddRequest;
 
-            var basket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault();
+            var basket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && !z.PurchaseDate.Equals(null)).FirstOrDefault();
             var basketProduct = App.Connection.BasketProduct.Where(z => z.idProduct.Equals(idProduct) && z.idBasket.Equals(basket.idBasket)).FirstOrDefault();
             if (basketProduct != null)
                 GetCountInBasket = basketProduct.Count;

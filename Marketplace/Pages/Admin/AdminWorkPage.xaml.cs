@@ -1,12 +1,13 @@
 ﻿using Marketplace.ADOModel;
+using Marketplace.Pages.Seller;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -15,22 +16,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Marketplace.Pages.Seller
+namespace Marketplace.Pages.Admin
 {
     /// <summary>
-    /// Interaction logic for SellerHomePage.xaml
+    /// Interaction logic for AdminWorkPage.xaml
     /// </summary>
-    public partial class SellerHomePage : Page
+    public partial class AdminWorkPage : Page
     {
         List<ViewProduct> products;
 
-        public SellerHomePage()
+        public AdminWorkPage()
         {
             InitializeComponent();
+
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
 
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => !z.isApproved).ToList());
 
             products.OrderBy(z => z.AmountOfSales);
 
@@ -46,9 +48,14 @@ namespace Marketplace.Pages.Seller
             CategorySortComboBox.SelectedItem = allProductCategory;
         }
 
-        private void NameHyperlinkClick(object sender, RoutedEventArgs e)
+        private void LoginHyperlinkClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SellerProductsPage());
+
+        }
+
+        private void AddNewProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AddNewProductPage());
         }
 
         private void LikeButtonClick(object sender, RoutedEventArgs e)
@@ -64,13 +71,13 @@ namespace Marketplace.Pages.Seller
             newLike.idUser = App.CurrentUser.idUser;
 
             var oldLike = App.Connection.Like.
-                Where(z => z.idProduct.Equals(currentProduct.idProduct) && 
+                Where(z => z.idProduct.Equals(currentProduct.idProduct) &&
                            z.idUser.Equals(App.CurrentUser.idUser)).
                 FirstOrDefault();
 
-            if ( oldLike != null)
+            if (oldLike != null)
             {
-                MessageBox.Show("Уже у вас в изрбранном", "Упс");
+                MessageBox.Show("Уже у вас в избранном", "Упс");
                 return;
             }
             else
@@ -84,7 +91,13 @@ namespace Marketplace.Pages.Seller
             }
         }
 
-        private void NavigateToBasketPageButtonClick(object sender, RoutedEventArgs e)
+        private void LogoButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminHomePage());
+        }
+
+
+        private void BusketButtonClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new BusketPage());
         }
@@ -107,8 +120,8 @@ namespace Marketplace.Pages.Seller
 
 
             if (categorySortComboBoxSelectedItem != null)
-                if((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
-                    list = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
+                if ((categorySortComboBoxSelectedItem as ProductCategory).Title.Equals("Все"))
+                    list = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => !z.isApproved).ToList());
 
             switch ((SortComboBox.SelectedItem as ComboBoxItem).Content.ToString())
             {
@@ -138,18 +151,18 @@ namespace Marketplace.Pages.Seller
 
         private void CategorySortComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
 
             var categorySortComboBoxSelectedItem = CategorySortComboBox.SelectedItem as ProductCategory;
 
             if (categorySortComboBoxSelectedItem.Title.Equals("Все"))
-                products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => z.onSell && z.isApproved).ToList());
+                products = Converter.ConvertToListViewProducts(App.Connection.Product.ToList());
             else
                 products = products.Where(z => z.ProductCategory.Equals(categorySortComboBoxSelectedItem)).ToList();
 
             var newList = OrderProductList(products);
 
-            if(newList != null)
+            if (newList != null)
                 products = newList;
 
             ProductList.ItemsSource = products;
@@ -161,6 +174,11 @@ namespace Marketplace.Pages.Seller
             NavigationService.Navigate(new QRPage());
         }
 
+        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new QRPage());
+        }
+
         private void AddProductToBasketButtonClick(object sender, RoutedEventArgs e)
         {
             if (ProductList.SelectedItem == null)
@@ -168,15 +186,15 @@ namespace Marketplace.Pages.Seller
 
             var newProductInBasket = new BasketProduct()
             {
-                idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket,
+                idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket,
                 idProduct = Converter.ConvertToProduct(ProductList.SelectedItem as ViewProduct).idProduct,
                 Count = 1
             };
 
-            var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser) && z.PurchaseDate.Equals(null)).FirstOrDefault().idBasket;
-            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault(); 
+            var idBasket = App.Connection.Basket.Where(z => z.idUser.Equals(App.CurrentUser.idUser)).FirstOrDefault().idBasket;
+            var oldBasketProductInBasket = App.Connection.BasketProduct.Where(z => z.idBasket.Equals(idBasket) && z.idProduct.Equals(newProductInBasket.idProduct)).FirstOrDefault();
 
-            if(oldBasketProductInBasket != null)
+            if (oldBasketProductInBasket != null)
             {
                 MessageBox.Show("Товар уже у вас в корзине!)", "Упс");
                 return;
@@ -188,9 +206,45 @@ namespace Marketplace.Pages.Seller
             MessageBox.Show("Товар успешно добавлен в корзину!)");
         }
 
-        private void BalanceHyperlinkClick(object sender, RoutedEventArgs e)
+        private void ApprovedProductButtonClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new QRPage());
+            if (ProductList.SelectedItem == null)
+                return;
+
+            var product = ProductList.SelectedItem as ViewProduct;
+
+            product.isApproved = true;
+
+            App.Connection.Product.AddOrUpdate(product);
+
+            App.Connection.SaveChanges();
+
+            RefreshList();
+        }
+
+        private void CancelProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ProductList.SelectedItem == null)
+                return;
+
+            var product = ProductList.SelectedItem as ViewProduct;
+
+            product.isApproved = true;
+
+            App.Connection.Product.Remove(product);
+
+            App.Connection.SaveChanges();
+
+            RefreshList();
+        }
+
+        private void RefreshList()
+        {
+            ProductList.ItemsSource = null;
+
+            products = Converter.ConvertToListViewProducts(App.Connection.Product.Where(z => !z.isApproved).ToList());
+
+            ProductList.ItemsSource = products;
         }
     }
 }

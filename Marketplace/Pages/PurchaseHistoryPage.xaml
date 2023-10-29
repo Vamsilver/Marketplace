@@ -58,7 +58,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="20" CanHorizontallyScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TextBlock FontSize="30" Margin="0,0,20,0">Покупка от </TextBlock>
-                        <TextBlock FontSize="30" Margin="0,0,20,0" Text="{Binding Path=PurchaseDate, StringFormat=dd.mm.yyyy}"></TextBlock>
+                        <TextBlock FontSize="30" Margin="0,0,20,0" Text="{Binding Path=PurchaseDate, StringFormat=dd.MM.yyyy}"></TextBlock>
                         <TextBlock FontSize="30" Margin="0,0,20,0">Сумма :</TextBlock>
                         <TextBlock FontSize="30" Margin="0,0,20,0" Text="{Binding Path=GetSumm, StringFormat=' {0} ₽'}"></TextBlock>
                     </StackPanel>

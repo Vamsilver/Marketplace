@@ -1,6 +1,7 @@
 ﻿using Marketplace.Pages.Seller;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,10 @@ namespace Marketplace.Pages
 
             UserNameTextBlock.Text = App.CurrentUser.Surname + " " + App.CurrentUser.Name.ElementAt(0) + ".";
             MoneyTextBlock.Text = App.CurrentUser.Balance.ToString();
+
+            App.CurrentUser.Balance += (decimal)5000.00;
+            App.Connection.User.AddOrUpdate(App.CurrentUser);
+            App.Connection.SaveChanges();
         }
 
         private void Page_Initialized(object sender, EventArgs e)

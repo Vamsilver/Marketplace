@@ -253,7 +253,7 @@ namespace Marketplace.Pages
             App.Connection.SaveChanges();
 
             MessageBox.Show("Товары успешно куплены!");
-            RefreshList();
+            NavigationService.Navigate(new BusketPage());
         }
 
         private void ShowHistoryButton_Click(object sender, RoutedEventArgs e)
